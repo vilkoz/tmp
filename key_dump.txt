@@ -1,0 +1,79 @@
+Old: Secret Key Packet(tag 5)(920 bytes)
+	Ver 4 - new
+	Public key creation time - Wed Mar  8 12:37:40 EET 2017
+	Pub alg - RSA Encrypt or Sign(pub 1)
+	RSA n(2048 bits) - d0 c0 20 d4 76 fc 09 39 71 44 7a 77 6b d6 c5 44 cf 44 3f 22 13 35 0b fb 8e ba 0f 86 44 0d 1d d3 2a e2 de 63 f9 73 6c e6 82 93 a4 0d 07 5b 12 3a cc 08 57 be 21 96 24 89 2e c7 2e 2a 68 1f 39 c4 6d ca 46 97 ff 79 b0 6d 50 97 19 88 99 17 fd cf 2a ff 81 e8 fc 1e 60 ef 02 01 71 da 22 00 db 93 4f c2 b6 b0 fd 50 81 79 3b a2 84 b8 c9 cf df 11 85 b7 23 c8 83 af b5 6f 46 ae 49 79 6a ef 7e 73 f4 ff 29 fc e1 5d 2e ab 2c 49 f5 7f 3c 31 72 bf 03 58 81 10 ea 2c 63 12 12 57 e8 f9 d3 43 2f 65 5e 23 c4 1e 86 c0 21 d9 c1 ca 3e dc d3 29 2e 24 3b 3c dc 08 f2 07 7a 31 f1 ec f0 99 10 e7 80 32 59 2b da 6c 12 6a ab fc 19 2f f2 f1 1f e8 f5 6e 5c a0 14 a9 a7 45 fb fa 1d 42 f0 2a b9 45 f7 bb 4e 9c b6 44 15 7d 55 61 31 45 83 e4 77 30 ff 3c 69 87 51 83 74 46 a6 35 d0 a3 33 fd f9 f1 d1 b1 
+	RSA e(17 bits) - 01 00 01 
+	RSA d(2046 bits) - 2a 71 0d 9b b4 ef 4c 3e d2 11 1e a7 1e 15 45 f9 55 fc a5 ab 5b 65 5b 20 d3 a5 6f 97 98 49 64 69 75 1c 38 23 f2 69 2d d8 75 ee e7 99 40 88 1b 1e 3a 32 6e 08 79 92 a9 ad fc 85 41 95 1c a3 50 9e e7 c5 8a f1 c7 5e e9 e8 67 cc b8 c3 c5 80 93 b9 65 a0 1a 3d 10 d9 6a 52 dd c1 06 71 57 9d 7e 07 26 dd cb 40 13 d8 a4 e2 4d a6 1e be e5 45 2e b0 c4 d3 75 e2 84 27 9a c7 5b 82 fe ec 41 3a 1d 26 bf 07 0c c4 3b 80 48 f8 33 2c 57 08 b3 21 a2 ad 16 d0 4f 47 6c 19 03 a5 c4 d0 b2 cf c0 b4 dc 17 3c 78 f2 f2 10 61 10 42 09 16 e7 10 27 e8 12 cb 42 f2 0c ae d7 ff dc cb b7 b9 ee 23 a0 27 55 6e 26 a9 96 6a ab ad 3f 9d 86 27 43 c2 44 2c 46 35 59 58 b5 db db e6 83 fd ed 98 93 0c 29 07 fb b4 ad b9 3e 94 27 1b 9e 94 1b 5e fd d7 79 60 17 a0 9a 58 43 7e 62 de d9 5e b7 64 90 f3 91 e2 cb 63 
+	RSA p(1024 bits) - d7 06 0f 1a 48 15 bc e1 0e b9 f0 39 63 ca 3b 24 ff 79 c0 60 7e 39 da f7 66 dd 8f 5c 9f 4c 10 92 32 53 3e d3 c4 70 b3 bb b2 59 54 6c b8 06 c8 64 3e 56 91 c1 9d 20 d1 a8 0c da 15 ab b4 9e 41 78 b4 da 6c 15 15 80 c7 0f 1e 69 cd f2 15 b9 69 83 42 5d 62 95 83 b9 07 c6 46 2c e2 d8 32 f7 71 f6 a6 15 41 0c ef 38 fb 7b ec dc 37 7b fc f1 b3 ac 5f 0a 36 9f d3 86 88 94 cb 74 4a 77 5d e0 06 9f 
+	RSA q(1024 bits) - f8 88 08 4f 85 29 bb 89 b1 44 ee eb 06 09 5d e0 f0 68 da 1c dc 55 5d e8 57 c2 53 fe cb 2f c0 fa 7d 20 fc 33 08 e0 4d 14 48 b2 39 fc b2 1a 84 32 18 e7 df 6b 63 f3 41 98 66 66 bb 1e 93 ef c2 97 8e 84 44 31 14 55 e4 9a 7c 0d 08 14 9b 7d a6 09 24 00 0f da cb 22 d3 2a d3 e5 93 58 89 65 b0 43 7e 14 80 97 61 e8 5d db d0 c7 12 5b 86 23 7e 8a 35 df a3 ff 78 43 c4 2e d0 92 c8 70 5a d5 d5 af 
+	RSA u(1024 bits) - eb 17 3c 5a b2 a8 ab aa 95 c6 aa dd 33 a2 06 e3 3c 2e df 31 2c 2b 24 50 ca a2 61 cd 1a 0c b0 a9 4a 41 19 a5 04 35 6c cd 61 d8 04 e4 29 a8 0e 94 1d 52 f8 19 d4 5d c0 63 95 10 45 43 26 ac ef b2 e4 26 99 11 4a ae 4c 69 38 62 d3 e8 22 ec 9a 0e b1 e3 d2 01 b7 cd ca 3e a4 02 c8 0a 8e a0 1e ff 24 76 f2 37 9b c1 e4 f5 7e eb 58 11 82 dd 0f c9 98 ad ed 1e 04 f5 85 4f d1 bf 7f b5 4e 49 4c 71 
+	Checksum - 3f 07 
+Old: User ID Packet(tag 13)(27 bytes)
+	User ID - vitalii <vilko.a@gmail.com>
+Old: Signature Packet(tag 2)(340 bytes)
+	Ver 4 - new
+	Sig type - Positive certification of a User ID and Public Key packet(0x13).
+	Pub alg - RSA Encrypt or Sign(pub 1)
+	Hash alg - SHA256(hash 8)
+	Hashed Sub: unknown(sub 33)(21 bytes)
+	Hashed Sub: signature creation time(sub 2)(4 bytes)
+		Time - Wed Mar  8 12:37:40 EET 2017
+	Hashed Sub: key flags(sub 27)(1 bytes)
+		Flag - This key may be used to certify other keys
+		Flag - This key may be used to sign data
+	Hashed Sub: key expiration time(sub 9)(4 bytes)
+		Time - Fri Mar  8 12:37:40 EET 2019
+	Hashed Sub: preferred symmetric algorithms(sub 11)(4 bytes)
+		Sym alg - AES with 256-bit key(sym 9)
+		Sym alg - AES with 192-bit key(sym 8)
+		Sym alg - AES with 128-bit key(sym 7)
+		Sym alg - Triple-DES(sym 2)
+	Hashed Sub: preferred hash algorithms(sub 21)(5 bytes)
+		Hash alg - SHA256(hash 8)
+		Hash alg - SHA384(hash 9)
+		Hash alg - SHA512(hash 10)
+		Hash alg - SHA224(hash 11)
+		Hash alg - SHA1(hash 2)
+	Hashed Sub: preferred compression algorithms(sub 22)(3 bytes)
+		Comp alg - ZLIB <RFC1950>(comp 2)
+		Comp alg - BZip2(comp 3)
+		Comp alg - ZIP <RFC1951>(comp 1)
+	Hashed Sub: features(sub 30)(1 bytes)
+		Flag - Modification detection (packets 18 and 19)
+	Hashed Sub: key server preferences(sub 23)(1 bytes)
+		Flag - No-modify
+	Sub: issuer key ID(sub 16)(8 bytes)
+		Key ID - 0x7EF4C794A22B1CE1
+	Hash left 2 bytes - e1 2b 
+	RSA m^d mod n(2047 bits) - 7e b9 0e 2f 82 65 4e 0d bf 06 01 d8 19 2d f1 31 df 7b e4 c6 34 d8 83 55 4a 02 27 c4 59 1f d5 10 5c 82 7e 83 74 83 cd 6c af ae 85 bf 21 de aa 55 c1 61 10 f9 f4 0d f9 9a 5c cc 97 2c 98 8b f4 42 68 5f 55 c3 16 17 25 2f 5a 71 d9 c5 0a a3 ce 30 b5 b0 36 66 c3 a4 32 83 1d 38 55 cb e6 d2 86 78 c0 6c 72 6d 8c 97 7e 58 d4 02 94 4f 04 74 2f 8e 42 fb 3c 05 36 9f ed c1 b6 f3 74 86 d8 5e a0 b8 3f bd 60 70 14 ac 77 83 72 49 9c 7c 91 6d 15 d0 75 0f 19 dd 1c 18 2c 7e 18 9c 74 9a b8 17 86 38 ca 9e e7 65 9d d4 7e d9 e1 4f a0 1e a6 56 c9 82 84 1a 84 69 e5 cc 5a cf 95 c1 33 b2 ee 1b c4 f8 34 f1 3a 43 92 7e 8e 6b 7a f7 e9 c7 76 26 b8 8f 6d fb 3a 8a c2 98 3e e3 2b 7b c7 b1 c7 39 e2 3e cb 5d 43 9a 9e 5d b0 4b 95 ea 05 d5 7d 76 ec 18 ba d3 5a e4 bc 88 c4 47 9a 01 98 9a 08 2b 32 97 
+		-> PKCS-1
+Old: Secret Subkey Packet(tag 7)(920 bytes)
+	Ver 4 - new
+	Public key creation time - Wed Mar  8 12:37:40 EET 2017
+	Pub alg - RSA Encrypt or Sign(pub 1)
+	RSA n(2048 bits) - e3 fa 96 ba 07 79 c2 9d ad 9f 7b 18 48 71 96 8a 54 c7 18 c8 6f 00 6c c9 3a e0 1e f3 45 60 7d e1 71 ab ab 7b a9 2e d2 5d 02 01 71 b9 b9 81 42 97 40 1e 69 27 d6 a2 81 1e 83 ce d6 fc ed a7 cf f7 f9 18 a8 dc 41 66 49 1c e9 14 23 81 d1 4a 8a 33 af da 79 7f c5 b4 e1 69 9a 6d 88 af 8e 41 45 8d 57 9e eb da a5 13 c1 46 3d 48 3a ca 25 bd 1f 25 49 e2 a2 60 fb bc 7e 1c 9f 5e bd d1 b6 34 d2 23 ff fb 69 ac e7 57 ba cd 29 d1 d2 4a ae 93 15 26 9f 63 25 9a a9 76 ed 12 ae e1 30 27 be ef 16 77 64 03 bf a7 8c a4 a6 21 48 e1 42 45 99 4d 6e 9b 37 0c 76 ae b0 cf 3c 48 6b 18 c3 45 9b bf c7 ff 40 ca f1 f3 ee 41 de 8e 7c 6f 31 4d 3e 7b bd ca 99 ac 9e f7 6d 5f 20 21 bb 26 e9 cc 4c f1 e2 85 61 8b 03 1d 0d 87 8c 0f 5d f1 5c 7a 0d 72 ee 7e 8f 05 6d df 01 b5 cd c8 66 88 6c c8 38 31 73 db 
+	RSA e(17 bits) - 01 00 01 
+	RSA d(2045 bits) - 1f 24 e7 9c 68 53 08 f4 33 78 da ff 19 3e 73 3b 58 93 8e 5e 2b 53 da 88 af 03 59 17 10 be 3a d4 26 8c 36 34 01 8b c4 ef 31 cb f2 b6 55 92 43 ff 97 a1 cf e9 c2 57 96 de 0d 51 9f 6b 14 28 5d af d9 96 b5 d2 c9 18 69 1a 8a f8 d6 54 f0 bb 87 1f c2 81 4d 21 d8 67 7a 77 cb c1 f4 ef 4e b6 ba 02 b2 1a a2 cb ce cb 61 16 f0 5e 42 b1 c4 f0 0e 26 30 ee c6 12 0b b1 d7 64 9f 9c f8 bf 82 6d ba db 30 24 b7 89 ca bc 08 f1 2e 76 3f 14 fc 18 01 54 2d 5e ec 3e 05 65 2a 1d be d1 fc ed aa 80 e7 04 83 75 ed 30 fc d9 c1 05 85 ee 0c 56 64 7a 9c b9 37 d3 f3 a0 bb f3 1f a4 ae d8 b7 a0 cb 8b 02 59 ae 41 fb 03 5b 9b 07 c2 50 2f 6c 18 ae 8d 83 44 f4 b3 1e 79 8f 60 8b cd d3 a6 c5 97 cc a2 a1 b8 77 e4 b1 ea 09 b3 95 84 52 45 1f 0b f2 51 40 e3 33 f9 1a 01 bf bb 01 f0 20 44 b1 6b 0a de 89 51 
+	RSA p(1024 bits) - ee 0c b1 c4 c2 24 f7 c7 ad 83 ef 81 5d 53 a1 2e 60 51 52 45 bb da 5d eb 32 68 db cc 18 f9 88 a0 88 dc 13 ce 1d 1a 08 38 17 b5 f1 c8 66 fc 3d 83 04 4a f7 7b d0 99 c6 90 91 95 eb ec 12 95 9b 6b 87 13 57 16 4d c8 cf c3 c9 96 2f 5d d0 4f bd 46 56 00 98 33 42 64 55 e2 78 1f 3e db 39 a8 3f ff ed 8e a2 87 98 41 d3 2e 62 f1 3e 56 e3 35 33 66 3e 52 36 30 2a 93 23 4c f8 a5 97 f7 c9 d1 c0 a3 
+	RSA q(1024 bits) - f5 2b 7d 3f 17 55 d3 b6 c8 b1 ce 38 8a c7 60 2d 77 cb fb 64 aa 44 97 13 c9 73 bb ad 5b 5e d2 47 e6 f3 9c ab 24 25 a7 e9 2a 34 5e f9 36 85 32 b3 5c 62 2e 49 90 10 87 40 6d 96 36 d6 99 9c 9c 04 0d 90 56 84 56 e3 d8 56 e5 3c ca b0 6b 73 2d 4f 47 ee 28 a8 b8 db df ff 0e 49 32 9a 50 b9 2b 40 fb 66 b9 16 d3 c9 1a b3 68 79 2c b7 de eb 5f fb 70 84 27 1a 54 f4 77 c8 15 4e c8 20 49 0a db 69 
+	RSA u(1024 bits) - e9 05 25 a9 91 b9 73 97 d8 e9 9a c6 75 96 9c 67 49 e1 1e a8 fe d6 92 37 48 d6 bb 4d 4e d0 66 62 90 9a 95 48 7b bb 9e e0 d7 0f 50 3c a4 6f 59 ae 81 50 2d 47 45 2c 90 18 96 1b b9 37 eb 5e 7f 65 7e 13 4b 3e 4d d2 83 cf e2 06 d8 fd 60 4d 0b a2 da 23 7e 22 e1 36 3d 22 3d 16 78 97 49 4e 25 be 74 f7 dc fc c8 f1 34 5a c7 3b 52 fc ae 12 cb fb 9e 72 b9 b3 b8 33 f6 be 0d ed 8e 89 51 bb f5 7a 
+	Checksum - 46 9f 
+Old: Signature Packet(tag 2)(316 bytes)
+	Ver 4 - new
+	Sig type - Subkey Binding Signature(0x18).
+	Pub alg - RSA Encrypt or Sign(pub 1)
+	Hash alg - SHA256(hash 8)
+	Hashed Sub: unknown(sub 33)(21 bytes)
+	Hashed Sub: signature creation time(sub 2)(4 bytes)
+		Time - Wed Mar  8 12:37:40 EET 2017
+	Hashed Sub: key flags(sub 27)(1 bytes)
+		Flag - This key may be used to encrypt communications
+		Flag - This key may be used to encrypt storage
+	Hashed Sub: key expiration time(sub 9)(4 bytes)
+		Time - Fri Mar  8 12:37:40 EET 2019
+	Sub: issuer key ID(sub 16)(8 bytes)
+		Key ID - 0x7EF4C794A22B1CE1
+	Hash left 2 bytes - b1 ea 
+	RSA m^d mod n(2047 bits) - 6f 68 bb 0a 20 09 42 10 9a f8 71 41 95 a7 54 aa 5d 14 73 60 79 9b 22 3c 30 b8 8f a3 ee 71 7e 6d dc 7b 65 04 ea e9 c2 2f 8e f6 62 10 ae 0d eb 9e 85 62 b8 1e 17 24 51 66 05 2f 93 ea a7 f7 63 ed c2 1e 93 a7 df 34 5a b6 87 54 5e ec 85 ec 84 0b 19 42 07 cc 40 c7 45 ac 84 c7 d2 db 52 de f7 dc 73 53 75 67 3c 30 4a 83 66 67 81 8f 8f 60 f1 3e 82 2d 30 89 44 22 1d 61 03 df ff 62 8a 13 77 f5 71 e6 0a 8a 9f d9 b1 70 f8 7b fa 72 be 1e 80 1a b5 9a 31 09 40 89 e2 e3 05 06 8a e7 24 26 d0 66 81 68 23 6a e1 c3 6a 36 79 52 03 34 76 47 3b 91 0d 93 2a fc 12 78 b3 b0 e5 c5 42 59 c5 9d 8b 5c 88 c1 e4 f7 27 f9 97 88 d4 8e 6c b6 06 04 64 2b c1 57 65 73 a8 95 9d 0b 59 11 8e 3e d9 b8 1a 84 d9 8a 46 40 40 a3 c0 e3 36 80 d4 bc 4b 9a 4f 8f e8 26 c6 08 bc fd 40 3d dd 2c db 3b bd 25 ed 5b 
+		-> PKCS-1
