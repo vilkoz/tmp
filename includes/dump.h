@@ -7,6 +7,7 @@
 # include <stdint.h>
 # include <string.h>
 # include "../libft/libft.h"
+# include "rsa.h"
 
 typedef struct		s_num
 {
@@ -18,7 +19,7 @@ typedef struct		s_num
 	uint16_t		*u;
 }					t_num;
 
-void				encode_rsa(char *name);
+void				encode_rsa(char *name, char *msg_name);
 t_num				*read_nums(char *name);
 
 #endif
