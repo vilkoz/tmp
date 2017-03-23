@@ -32,7 +32,7 @@ uint8_t		byte_from_hex(char *pos)
 		octet2 = pos[1] - '0';
 	else
 		octet2 = pos[1] - 'a' + 10;
-	return ((octet1 << 4) | octet2);
+	return (reverse((octet1 << 4) | octet2));
 }
 
 int			fill_num(t_num *nums, char *line)
@@ -44,8 +44,8 @@ int			fill_num(t_num *nums, char *line)
 	int			i;
 
 	size = ft_atoi(ft_strchr(line, '(') + 1);
-	tmp = (uint16_t *)malloc(size / 8);
-	num = (uint8_t *)malloc(size / 8);
+	tmp = (uint16_t *)malloc(size / 8 + 1);
+	num = (uint8_t *)malloc(size / 8 + 1);
 	pos = ft_strchr(line, '-');
 	i = 0;
 	while ((pos = ft_strchr(pos, ' ') + 1)[0] != '\0')
@@ -55,7 +55,7 @@ int			fill_num(t_num *nums, char *line)
 	}
 	i = -1;
 	while (++i < size / 16)
-		tmp[i] = ((num[i * 2] << 8) | num[i * 2 + 1]);
+		tmp[i] = ((num[i * 2 + 1] << 8) | num[i * 2]);
 	if (choose_pointer(nums, line[0], tmp) == 1)
 		return (1);
 	return (0);
@@ -70,7 +70,7 @@ t_num		*read_nums(char *name)
 	if ((fd = open(name, O_RDONLY)) == -1)
 	{
 		perror (name);
-		return (NULL);
+		exit (1);
 	}
 	nums = (t_num*)malloc(sizeof(t_num));
 	line = NULL;
@@ -112,12 +112,10 @@ t_list			*char_to_bytes(t_list *lst)
 		num[i / 2] = 0 | reverse(tmp[i]);
 	while (++j < MPI_NUMBER_SIZE)
 		num[j] = 0;
-	// free(lst->content);
-	// free(lst);
 	return (ft_lstnew((void *)num, sizeof(uint16_t) * MPI_NUMBER_SIZE));
 }
 
-t_list		*read_message(char *msg_name)
+t_list		*read_message(char *msg_name, int type)
 {
 	int				fd;
 	t_list			*lst;
@@ -131,8 +129,11 @@ t_list		*read_message(char *msg_name)
 	}
 	lst = NULL;
 	while ((i = read(fd, buf, 256)) > 0)
-		ft_lstadd(&lst, ft_lstnew((void *)buf, i));
-	return (ft_lstmap(lst, char_to_bytes));
+		ft_lstadd(&lst, ft_lstnew((void *)buf, sizeof(char) * 256));
+	if (type == ENCODE)
+		return (ft_lstmap(lst, char_to_bytes));
+	else
+		return (lst);
 }
 
 void		encode_blocks(t_list *lst, t_num *nums)
@@ -143,7 +144,7 @@ void		encode_blocks(t_list *lst, t_num *nums)
 	tmp = lst;
 	while (tmp)
 	{
-		m = (uint16_t *)lst->content;
+		m = (uint16_t *)tmp->content;
 		mpi_powm65537(m, nums->n);
 		tmp = tmp->next;
 	}
@@ -156,6 +157,7 @@ void		print_list(t_list *lst)
 
 	i = -1;
 	tmp = (unsigned char *)lst->content;
+	printf("%lu\n", lst->content_size);
 	while (++i < (int)lst->content_size)
 		printf("%c", tmp[i]);
 }
@@ -165,12 +167,9 @@ void		encode_rsa(char *name, char *msg_name)
 	t_num	*nums;
 	t_list	*msg;
 
-	if ((nums = read_nums(name)) == NULL)
-	{
-		printf("read error\n");
-		exit(1);
-	}
-	msg = read_message(msg_name);
+	nums = read_nums(name);
+	msg = read_message(msg_name, ENCODE);
+	// ft_lstiter(msg, print_list);
 	encode_blocks(msg, nums);
 	ft_lstiter(msg, print_list);
 }

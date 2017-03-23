@@ -13,8 +13,7 @@ int		main(int argc, char **argv)
 	if (ft_strcmp(argv[1], "-e") == 0)
 		encode_rsa(argv[2], argv[3]);
 	else if (ft_strcmp(argv[1], "-d") == 0)
-		printf("(placeholder)\n");
-		//decode_rsa(argv[2]);
+		decode_rsa(argv[2], argv[3]);
 	else
 		return (put_usage());
 	return (0);
