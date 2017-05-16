@@ -55,7 +55,7 @@ int			fill_num(t_num *nums, char *line)
 	}
 	i = -1;
 	while (++i < size / 16)
-		tmp[i] = ((num[i * 2 + 1] << 8) | num[i * 2]);
+		tmp[i] = (reverse(num[i * 2] << 8) | reverse(num[i * 2 + 1]));
 	if (choose_pointer(nums, line[0], tmp) == 1)
 		return (1);
 	return (0);
@@ -157,7 +157,6 @@ void		print_list(t_list *lst)
 
 	i = -1;
 	tmp = (unsigned char *)lst->content;
-	printf("%lu\n", lst->content_size);
 	while (++i < (int)lst->content_size)
 		printf("%c", tmp[i]);
 }
