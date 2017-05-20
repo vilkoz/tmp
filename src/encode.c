@@ -1,5 +1,28 @@
 #include "dump.h"
 
+uint16_t	rev_uint(uint16_t a)
+{
+	unsigned char	p1;
+	unsigned char	p2;
+	uint16_t		res;
+
+	p1 = (a >> 8) & 0xff;
+	p2 = (a >> 0) & 0xff;
+	res = reverse(p2) << 8 | reverse(p1);
+	return (res);
+}
+
+uint16_t	rev_endian(uint16_t a)
+{
+	uint16_t b0,b1;
+	uint16_t res;
+
+	b0 = (a & 0x00ff) << 8u;
+	b1 = (a & 0xff00) >> 8u;
+	res = b0 | b1;
+	return (res);
+}
+
 int			choose_pointer(t_num *nums, char c, uint16_t *tmp)
 {
 	if (c == 'n')
@@ -32,7 +55,7 @@ uint8_t		byte_from_hex(char *pos)
 		octet2 = pos[1] - '0';
 	else
 		octet2 = pos[1] - 'a' + 10;
-	return (reverse((octet1 << 4) | octet2));
+	return (((octet1 << 4) | octet2));
 }
 
 int			fill_num(t_num *nums, char *line)
@@ -54,8 +77,11 @@ int			fill_num(t_num *nums, char *line)
 		i++;
 	}
 	i = -1;
-	while (++i < size / 16)
-		tmp[i] = (reverse(num[i * 2] << 8) | reverse(num[i * 2 + 1]));
+	while (++i <= size / 16)
+	{
+		tmp[i] = ((num[i * 2] << 8) | (num[i * 2 + 1]));
+		tmp[i] = rev_endian(tmp[i]);
+	}
 	if (choose_pointer(nums, line[0], tmp) == 1)
 		return (1);
 	return (0);
@@ -107,9 +133,9 @@ t_list			*char_to_bytes(t_list *lst)
 	else
 		j = MPI_NUMBER_SIZE - 1;
 	while (--i - 1 >= 0)
-		num[i / 2] = reverse(tmp[i]) << 8 | reverse (tmp[i - 1]);
+		num[i / 2] = (tmp[i]) << 8 | (tmp[i - 1]);
 	if (i == 0)
-		num[i / 2] = 0 | reverse(tmp[i]);
+		num[i / 2] = 0 | (tmp[i]);
 	while (++j < MPI_NUMBER_SIZE)
 		num[j] = 0;
 	return (ft_lstnew((void *)num, sizeof(uint16_t) * MPI_NUMBER_SIZE));

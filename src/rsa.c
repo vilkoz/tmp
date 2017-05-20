@@ -247,6 +247,8 @@ void mpi_powm65537(uint16_t* m, const uint16_t* n)
     uint8_t count = 16;    // First, square the number M modulo N 16 times
     uint16_t bufprod[MPI_NUMBER_SIZE*2]; // Squaring buffer, double size
     uint16_t bufmod[MPI_NUMBER_SIZE]; // Modulo buffer, single size
+	bzero(bufprod, MPI_NUMBER_SIZE * 2 * sizeof(uint16_t));
+	bzero(bufmod, MPI_NUMBER_SIZE * sizeof(uint16_t));
     memcpy(bufmod,m,MPI_NUMBER_SIZE*2);
     do
     {

@@ -31,11 +31,21 @@ t_num				*read_nums(char *name);
 t_list				*read_message(char *msg_name, int type);
 void				print_list(t_list *lst);
 unsigned char		reverse(unsigned char b);
+uint16_t			rev_endian(uint16_t a);
 
 /*
 ** decode_rsa.c
 */
 
 void				decode_rsa(char *name, char *msg_name);
+
+/*
+** rsa_d.c
+*/
+
+void				print_mpi(uint16_t *d);
+int					is_zero(uint16_t *d_buf);
+int					is_even(uint16_t *d_buf);
+void				mpi_div_2(uint16_t *d);
 
 #endif
