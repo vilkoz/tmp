@@ -1,0 +1,71 @@
+Number of clients:  0
+accepted connection from  ('127.0.0.1', 51422)
+Number of clients:  0
+processing: 
+<socket.socket fd=4, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51422)> 
+('127.0.0.1', 51422)
+accepted connection from  ('127.0.0.1', 51426)
+Number of clients:  1
+accepted connection from  ('127.0.0.1', 51428)
+Number of clients:  2
+received and decoded data: new message from client number 4
+Number of clients:  2
+processing: 
+<socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51428)> 
+('127.0.0.1', 51428)
+accepted connection from  ('127.0.0.1', 51430)
+Number of clients:  2
+accepted connection from  ('127.0.0.1', 51432)
+Number of clients:  3
+accepted connection from  ('127.0.0.1', 51434)
+Number of clients:  4
+received and decoded data: new message from client number 9
+Number of clients:  4
+processing: 
+<socket.socket fd=6, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51432)> 
+('127.0.0.1', 51432)
+accepted connection from  ('127.0.0.1', 51438)
+Number of clients:  4
+accepted connection from  ('127.0.0.1', 51440)
+Number of clients:  5
+accepted connection from  ('127.0.0.1', 51442)
+Number of clients:  6
+received and decoded data: new message from client number 3
+Number of clients:  6
+processing: 
+<socket.socket fd=10, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51438)> 
+('127.0.0.1', 51438)
+received and decoded data: new message from client number 7
+Number of clients:  5
+processing: 
+<socket.socket fd=11, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51442)> 
+('127.0.0.1', 51442)
+received and decoded data: new message from client number 10
+Number of clients:  4
+processing: 
+<socket.socket fd=5, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51426)> 
+('127.0.0.1', 51426)
+received and decoded data: new message from client number 2
+Number of clients:  3
+processing: 
+<socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51434)> 
+('127.0.0.1', 51434)
+received and decoded data: new message from client number 1
+Number of clients:  2
+processing: 
+<socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51430)> 
+('127.0.0.1', 51430)
+received and decoded data: new message from client number 5
+Number of clients:  1
+processing: 
+<socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51440)> 
+('127.0.0.1', 51440)
+received and decoded data: new message from client number 8
+Number of clients:  0
+accepted connection from  ('127.0.0.1', 51436)
+Number of clients:  0
+processing: 
+<socket.socket fd=12, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50012), raddr=('127.0.0.1', 51436)> 
+('127.0.0.1', 51436)
+received and decoded data: new message from client number 6
+Number of clients:  0
