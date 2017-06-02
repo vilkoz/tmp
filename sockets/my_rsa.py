@@ -55,10 +55,10 @@ def print_hex(__num):
         __num >>= 8
     j = 32;
     for byte in reversed(__hex_arr):
-        print("%02x" % byte, end="")
+        print "%02x" % byte,
         j -= 1;
         if (j % 2 == 0):
-            print("", end=" ")
+            print "", 
         if (j == 0):
             print("")
             j = 32
@@ -73,11 +73,11 @@ def print_res(__num):
     is_pad = 1
     for byte in reversed(__hex_arr):
         if not is_pad:
-            print("%02x" % byte, end="")
+            print "%02x" % byte,
         j -= 1;
         if (j % 2 == 0):
             if not is_pad:
-                print("", end=" ")
+                print "",
         if (j == 0):
             if not is_pad:
                 print("")
@@ -132,6 +132,20 @@ def check_len(pub_key, msg):
         print("Message is too long!")
         exit(2)
     return (rlen)
+
+def encode_withot_pad(msg_text, numbers_path):
+    fo = open(numbers_path, "r")
+    (n, e, d) = parse_nums(fo)
+    msg = char_to_num(msg_text)
+    if VERBOSE:
+        print("msg")
+        print_hex(msg)
+        print("random padding")
+    r = pow(msg, e, n)
+    if VERBOSE:
+        print("encoded1")
+        print_hex(r)
+    return (r)
 
 def encode(msg_text, numbers_path):
     fo = open(numbers_path, "r")
