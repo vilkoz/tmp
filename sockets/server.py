@@ -52,7 +52,8 @@ def proc_sockets(socket_list):
     for client in socket_list:
         string = "processing: \n" + repr(client[0]) + " \n" + repr(client[1])
         print (string)
-        received_data = int.from_bytes(my_receive(client[0]), "big")
+        # received_data = int.from_bytes(my_receive(client[0]), "big")
+        received_data = my_rsa.unpack(my_receive(client[0]))
         if (VERBOSE):
             print("received data: \n")
             my_rsa.print_hex(received_data)
@@ -70,7 +71,8 @@ class ProcThread(threading.Thread):
     def run(self):
         print("Number of clients: ", len(self.clients_list))
         while True:
-            proc_sockets(self.clients_list)
+            if len(self.clients_list) > 0:
+                proc_sockets(self.clients_list)
     def add_client(self, client):
         print("Number of clients: ", len(self.clients_list))
         self.clients_list.append(client)
