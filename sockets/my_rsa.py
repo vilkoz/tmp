@@ -74,10 +74,10 @@ def print_hex(__num):
         __num >>= 8
     j = 32;
     for byte in reversed(__hex_arr):
-        print "%02x" % byte,
+        print ("%02x" % byte, end="")
         j -= 1;
         if (j % 2 == 0):
-            print "", 
+            print (" ", end="")
         if (j == 0):
             print("")
             j = 32
@@ -92,11 +92,11 @@ def print_res(__num):
     is_pad = 1
     for byte in reversed(__hex_arr):
         if not is_pad:
-            print "%02x" % byte,
+            print ("%02x" % byte, end="")
         j -= 1;
         if (j % 2 == 0):
             if not is_pad:
-                print "",
+                print (" ", end="")
         if (j == 0):
             if not is_pad:
                 print("")
