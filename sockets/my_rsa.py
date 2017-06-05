@@ -152,7 +152,7 @@ def check_len(pub_key, msg):
         exit(2)
     return (rlen)
 
-def encode_withot_pad(msg_text, numbers_path):
+def encode_sign(msg_text, numbers_path):
     fo = open(numbers_path, "r")
     (n, e, d) = parse_nums(fo)
     msg = char_to_num(msg_text)
@@ -160,11 +160,21 @@ def encode_withot_pad(msg_text, numbers_path):
         print("msg")
         print_hex(msg)
         print("random padding")
-    r = pow(msg, e, n)
+    r = pow(msg, d, n)
     if VERBOSE:
         print("encoded1")
         print_hex(r)
     return (r)
+
+def decode_sign(chiper_text, numbers_path):
+    fo = open(numbers_path, "r")
+    (n, e, d) = parse_nums(fo)
+    r = pow(chiper_text, e, n)
+    if VERBOSE:
+        print("decoded")
+        print_res(r)
+        print(num_to_char(r))
+    return (num_to_char(r))
 
 def encode(msg_text, numbers_path):
     fo = open(numbers_path, "r")

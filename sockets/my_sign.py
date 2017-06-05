@@ -8,7 +8,7 @@ import base64
 def sign_data(data, keys_path):
     sha256_sum = hashlib.sha256(data).hexdigest()
     sign = base64.b64encode(str(my_rsa.encode_sign(sha256_sum, keys_path)), 'ascii')
-    return (json.dumps((sign, data)))
+    return sign
 
 def verify_sign(signature, data, keys_path):
     sha256_sum = hashlib.sha256(data).hexdigest()
@@ -16,3 +16,8 @@ def verify_sign(signature, data, keys_path):
     print("sum =\n", sha256_sum)
     print("decr_sign =\n", decr_sign)
     return (sha256_sum == decr_sign)
+
+if __name__ == "__main__":
+    data = "my data"
+    sign = sign_data(data, "../numbers.txt")
+    print(verify_sign(sign, data, "../numbers.txt"))
