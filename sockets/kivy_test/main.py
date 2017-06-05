@@ -39,6 +39,9 @@ class LoginScreen(GridLayout):
     def __init__(self, **kwargs):
         super(LoginScreen, self).__init__(**kwargs)
         self.cols = 2
+        self.add_widget(Label(text="Output"))
+        self.output = Label(text="")
+        self.add_widget(self.output)
         self.add_widget(Label(text='message'))
         self.message = TextInput(multiline=False)
         self.add_widget(self.message)
@@ -47,10 +50,7 @@ class LoginScreen(GridLayout):
         self.add_widget(self.send)
         self.add_widget(Button(text="settings",
             on_press = self.open_settings))
-        self.add_widget(Label(text="Output"))
-        self.output = Label(text="")
-        self.add_widget(self.output)
-        self.load_strings()
+        # self.load_strings()
 
     def open_settings(self, obj):
         sm.transition.direction = "left"
@@ -66,10 +66,11 @@ class LoginScreen(GridLayout):
             contents = json.loads(f.read())
             # self.ipaddr.text = contents['ip'].encode()
             # self.keys_path.text = contents['keys_path'].encode()
-            return (contents['ip'].encode(), contents['keys_path'].encode())
+            return (contents['ip'].encode(), contents['keys_path'].encode(),
+                    contents['phone_number'].encode())
 
     def send_data(self, obj):
-        (ipaddr, keys_path) = self.load_strings()
+        (ipaddr, keys_path, phone_number) = self.load_strings()
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((ipaddr, 50012))
         encoded_int = (my_rsa.encode(self.message.text, keys_path));
@@ -92,6 +93,9 @@ class SettingsLayout(GridLayout):
         self.add_widget(Label(text="server ip"))
         self.ipaddr = TextInput()
         self.add_widget(self.ipaddr)
+        self.add_widget(Label(text="Phone number"))
+        self.phone_number = TextInput()
+        self.add_widget(self.phone_number)
         self.add_widget(Label(text="keys file"))
         self.keys_path = Button(text="../../numbers.txt",
                 on_press=self.show_load)
@@ -116,7 +120,8 @@ class SettingsLayout(GridLayout):
         with open(os.path.join(homedir, ".diplom", "fields.json"), "w+") as f:
             f.write(json.dumps({
                 "ip" : self.ipaddr.text,
-                "keys_path" : self.keys_path.text
+                "keys_path" : self.keys_path.text,
+                "phone_number" : self.phone_number.text
                 }))
 
     def load_strings(self):
@@ -129,6 +134,7 @@ class SettingsLayout(GridLayout):
             contents = json.loads(f.read())
             self.ipaddr.text = contents['ip'].encode()
             self.keys_path.text = contents['keys_path'].encode()
+            self.phone_number.text = contents['phone_number'].encode()
 
     def show_load(self, obj):
         content = LoadDialog(load=self.load, cancel=self.dismiss_popup)

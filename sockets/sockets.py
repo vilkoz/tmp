@@ -3,18 +3,31 @@
 import socket
 import sys
 import my_rsa
+import my_sign
+import json
+import base64
+import time
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(("127.0.0.1", 50012))
 encoded_int = (my_rsa.encode(sys.argv[1], "../numbers.txt"));
-# encoded_bytes = encoded_int.to_bytes((encoded_int.bit_length() + 7) // 8, "big")
-encoded_bytes = my_rsa.pack(encoded_int)
-#print("enc bytes = ", encoded_bytes)
+encoded_bytes = base64.b64encode(my_rsa.pack(encoded_int))
 
-send_data = encoded_bytes 
+json_data_id = json.dumps({
+    "data": encoded_bytes,
+    "id" : "+38234535345",
+    "exp_time" : int(time.time()) + 10
+    })
+sign = my_sign.sign_data(json_data_id, "../numbers.txt")
+json_send = json.dumps({
+    "sign" : sign,
+    "data_id" : json_data_id,
+    })
+print(json_send)
+send_data = json_send
 send_data += (b'\x00')
-# print(send_data)
+    # print(send_data)
+    # data = s.recv(1024)
+    # print ('Received ', (data.decode())) 
 s.sendall(send_data)
-# data = s.recv(1024)
 s.close()
-# print ('Received ', (data.decode())) 

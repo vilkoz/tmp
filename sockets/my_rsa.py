@@ -21,7 +21,7 @@ def unpack(__bytes):
     res = 0
     for byte in __bytes:
         res <<= 8
-        res += ((byte))
+        res += (ord(byte))
     return (res)
 
 
