@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 import socket
 import my_rsa
+import my_sign
 import json
 
 from kivy.app import App
@@ -74,14 +75,24 @@ class LoginScreen(GridLayout):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((ipaddr, 50012))
         encoded_int = (my_rsa.encode(self.message.text, keys_path));
-        encoded_bytes = my_rsa.pack(encoded_int)
-        send_data1 = encoded_bytes 
+        # encoded_bytes = my_rsa.pack(encoded_int)
+        encoded_bytes = base64.b64encode(my_rsa.pack(encoded_int))
+        json_data_id = json.dumps({
+            "data": encoded_bytes,
+            "id" : phone_number,
+            "exp_time" : int(time.time()) + 10
+            })
+        sign = my_sign.sign_data(json_data_id, "../numbers.txt")
+        json_send = json.dumps({
+            "sign" : sign,
+            "data_id" : json_data_id,
+            })
+        if (VERBOSE):
+            print(json_send)
+        send_data1 = json_send 
         send_data1 += (b'\x00')
-        # print(send_data)
         s.sendall(send_data1)
-        # data = s.recv(1024)
         s.close()
-        # print ('Received ', (data.decode())) 
 
 class SettingsLayout(GridLayout):
     def __init__(self, **kwargs):
