@@ -207,32 +207,16 @@ def decode(chiper_text, numbers_path):
 def echo_verbose():
     print(VERBOSE)
 
+if __name__ == "__main__":
+    if (len(sys.argv) != 3):
+        print("usage: ./parse.py message key_path")
+        exit(1)
+    else:
+        print("message len = " + str(len(sys.argv[1])))
+    key_path = sys.argv[2]
+    fo = open(key_path, "r")
+    (n, e, d) = parse_nums(fo)
 
-# if (len(sys.argv) != 2):
-#     print("usage: ./parse.py message")
-#     exit(1)
-# else:
-#     print("message len = " + str(len(sys.argv[1])))
-# fo = open("numbers.txt", "r")
-# (n, e, d) = parse_nums(fo)
-
-# check_len(n, msg)
-
-# msg = char_to_num(sys.argv[1]);
-# print("msg");
-# print_hex(msg)
-
-# print("random padding")
-# msg = (generate_random_padding(rlen, msg))
-# print_hex(msg)
-
-# r = pow(msg, e, n)
-# print("encoded1")
-# print_hex(r)
-
-# r = encode(sys.argv[1], "numbers.txt")
-
-# r = pow(r, d, n)
-# print("decoded")
-# print_res(r)
-# print(num_to_char_res(r))
+    msg = (sys.argv[1]);
+    r = encode(msg, key_path)
+    r = decode(r, key_path)
