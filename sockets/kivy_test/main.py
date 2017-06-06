@@ -3,6 +3,8 @@ import socket
 import my_rsa
 import my_sign
 import json
+import base64
+import time
 
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
@@ -82,13 +84,13 @@ class LoginScreen(GridLayout):
             "id" : phone_number,
             "exp_time" : int(time.time()) + 10
             })
-        sign = my_sign.sign_data(json_data_id, "../numbers.txt")
+        sign = my_sign.sign_data(json_data_id, keys_path)
         json_send = json.dumps({
             "sign" : sign,
             "data_id" : json_data_id,
             })
-        if (VERBOSE):
-            print(json_send)
+        # if (VERBOSE):
+        #     print(json_send)
         send_data1 = json_send 
         send_data1 += (b'\x00')
         s.sendall(send_data1)
