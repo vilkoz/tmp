@@ -67,30 +67,28 @@ class LoginScreen(GridLayout):
         if os.path.exists(os.path.join(homedir, ".diplom", "fields.json")):
             f = open(os.path.join(homedir, ".diplom", "fields.json"), "r")
             contents = json.loads(f.read())
-            # self.ipaddr.text = contents['ip'].encode()
-            # self.keys_path.text = contents['keys_path'].encode()
-            return (contents['ip'].encode(), contents['keys_path'].encode(),
+            return (contents['ip'].encode(),
+                    contents['keys_path'].encode(),
+                    contents['own_keys_path'].encode(),
                     contents['phone_number'].encode())
 
     def send_data(self, obj):
-        (ipaddr, keys_path, phone_number) = self.load_strings()
+        (ipaddr, keys_path, own_keys_path, phone_number) = self.load_strings()
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((ipaddr, 50012))
         encoded_int = (my_rsa.encode(self.message.text, keys_path));
-        # encoded_bytes = my_rsa.pack(encoded_int)
         encoded_bytes = base64.b64encode(my_rsa.pack(encoded_int))
         json_data_id = json.dumps({
             "data": encoded_bytes,
             "id" : phone_number,
+            "type" : "phone_number",
             "exp_time" : int(time.time()) + 10
             })
-        sign = my_sign.sign_data(json_data_id, keys_path)
+        sign = my_sign.sign_data(json_data_id, own_keys_path)
         json_send = json.dumps({
             "sign" : sign,
             "data_id" : json_data_id,
             })
-        # if (VERBOSE):
-        #     print(json_send)
         send_data1 = json_send 
         send_data1 += (b'\x00')
         s.sendall(send_data1)
@@ -113,6 +111,10 @@ class SettingsLayout(GridLayout):
         self.keys_path = Button(text="../../numbers.txt",
                 on_press=self.show_load)
         self.add_widget(self.keys_path)
+        self.add_widget(Label(text="own keys file"))
+        self.own_keys_path = Button(text="../../numbers.txt",
+                on_press=self.show_load)
+        self.add_widget(self.own_keys_path)
         self.load_strings()
 
     def back(self, obj):
@@ -134,6 +136,7 @@ class SettingsLayout(GridLayout):
             f.write(json.dumps({
                 "ip" : self.ipaddr.text,
                 "keys_path" : self.keys_path.text,
+                "own_keys_path" : self.own_keys_path.text,
                 "phone_number" : self.phone_number.text
                 }))
 
@@ -147,10 +150,14 @@ class SettingsLayout(GridLayout):
             contents = json.loads(f.read())
             self.ipaddr.text = contents['ip'].encode()
             self.keys_path.text = contents['keys_path'].encode()
+            self.own_keys_path.text = contents['own_keys_path'].encode()
             self.phone_number.text = contents['phone_number'].encode()
 
     def show_load(self, obj):
-        content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
+        if obj == self.keys_path:
+            content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
+        elif obj == self.own_keys_path:
+            content = LoadDialog(load=self.load_own, cancel=self.dismiss_popup)
         self._popup = Popup(title="Choose file", content=content,
                 size_hint=(0.9, 0.9))
         self._popup.open()
@@ -160,6 +167,10 @@ class SettingsLayout(GridLayout):
 
     def load(self, path):
         self.keys_path.text = path
+        self.dismiss_popup()
+
+    def load_own(self, path):
+        self.own_keys_path.text = path
         self.dismiss_popup()
 
 
@@ -183,7 +194,6 @@ sm.add_widget(SettingsScreen(name="settings"))
 class MyApp(App):
 
     def build(self):
-        # return LoginScreen()
         return sm
 
 

@@ -8,6 +8,7 @@ import my_sign
 import json
 import base64
 import time
+import database
 
 class DecodeError(Exception):
     pass
@@ -64,13 +65,19 @@ def verify_client_sign(received_data, client):
         json_msg = json.loads(received_data)
         signature = json_msg['sign'].encode()
         data_id_json = json_msg['data_id'].encode()
-        client_id = json.loads(data_id_json)['id']
+        data_json_arr = json.loads(data_id_json)
+        client_id = data_json_arr['id']
+        client_type = data_json_arr['type']
     except Exception as e:
         print("exception: ", (e.message))
         print("[ERROR] wrong message format! from" + repr(client[1]))
         raise SignatureError
+    if not database.get_match_key(client_id, client_type):
+        print("[ERROR] invalid id from" + repr(client[1]))
+        raise SignatureError
     # TODO: get numbers_path by user id
-    if not (my_sign.verify_sign(signature, data_id_json, "../numbers.txt")):
+    if not (my_sign.verify_sign(signature, data_id_json,
+    "keys/" + client_id + ".pem")):
         print("[ERROR] wrong signature from" + repr(client[1]))
         raise SignatureError
     return data_id_json

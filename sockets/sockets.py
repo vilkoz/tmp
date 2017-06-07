@@ -15,10 +15,11 @@ encoded_bytes = base64.b64encode(my_rsa.pack(encoded_int))
 
 json_data_id = json.dumps({
     "data": encoded_bytes,
-    "id" : "+38234535345",
+    "id" : "1234",
+    "type" : "phone_number",
     "exp_time" : int(time.time()) + 10
     })
-sign = my_sign.sign_data(json_data_id, "../numbers.txt")
+sign = my_sign.sign_data(json_data_id, "keys/1234.pem")
 json_send = json.dumps({
     "sign" : sign,
     "data_id" : json_data_id,
