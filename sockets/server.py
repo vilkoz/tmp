@@ -46,7 +46,7 @@ def my_receive(server):
             if VERBOSE:
                 print ("my_recerive: chunk [len(chunk - 1)] = ",
                         chunk[len(chunk) - 1])
-        if (len(chunk) == 0 or chunk[len(chunk) - 1] == 0):
+        if (len(chunk) == 0 or chunk[-1] == '\x00'):
             break
     ret = b""
     for chunk in chunks:
@@ -62,6 +62,7 @@ def verify_client_sign(received_data, client):
         client_id = data_json_arr['id']
         client_type = data_json_arr['type']
     except Exception as e:
+        print("received_data: ", received_data)
         print("exception: ", (e.message))
         print("[ERROR] wrong message format! from" + repr(client[1]))
         raise SignatureError
@@ -103,7 +104,6 @@ def srv_msg_wrap(msg, client_id):
         "data_id" : json_data_id,
         })
     send_data = json_send
-    send_data += (b'\x00')
     return send_data
 
 def verify_decode_raw(client, received_data):
@@ -151,6 +151,7 @@ def proc_client(client):
         try:
             response = send_message_to_car("guard on", client_id, client_type)
         except (SignatureError, DecodeError):
+            print("[ERROR] send message fail")
             return 0
         if (response == "guard started"):
             print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + 
@@ -159,6 +160,7 @@ def proc_client(client):
         try:
             response = send_message_to_car("guard off", client_id, client_type)
         except (SignatureError, DecodeError):
+            print("[ERROR] send message fail")
             return 0
         if (response == "guard stopped"):
             print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + 
