@@ -16,7 +16,7 @@ CAR_ID = "192.168.0.247"
 MODE = 0
 
 HOST = ""
-PORT = 50013
+PORT = 50012
 
 class DecodeError(Exception):
     pass
@@ -120,7 +120,9 @@ def proc_connection(con_socket, info_thread):
     if (data == "guard on"):
         info_thread = StoppableThread()
         info_thread.start()
+        print("sending response")
         my_send(con_socket, msg_wrap_to_send("guard started"))
+        print("sended response")
         con_socket.close()
         return info_thread
     elif (data == "guard off"):
