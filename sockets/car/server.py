@@ -12,7 +12,7 @@ import database
 
 MSGLEN = 4096
 my_rsa.VERBOSE = False
-VERBOSE = False
+VERBOSE = True
 
 class DecodeError(Exception):
     pass
@@ -46,7 +46,7 @@ def my_receive(server):
             if VERBOSE:
                 print ("my_recerive: chunk [len(chunk - 1)] = ",
                         chunk[len(chunk) - 1])
-        if (len(chunk) == 0 or chunk[len(chunk) - 1] == 0):
+        if (len(chunk) == 0 or chunk[-1] == '\x00'):
             break
     ret = b""
     for chunk in chunks:
@@ -126,7 +126,7 @@ def send_message_to_car(msg, client_id, client_type):
     car_ip = database.get_match_key(client_id, client_type)
     s_new = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s_new.connect((car_ip, 50012))
-    s_new.sendall(srv_msg_wrap(msg, car_ip))
+    my_send(s_new, srv_msg_wrap(msg, car_ip))
     # my_receive(s_new)
     (decoded_data,
     client_id,
