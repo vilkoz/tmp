@@ -127,7 +127,7 @@ def send_message_to_car(msg, client_id, client_type):
     car_ip = database.get_match_key(client_id, client_type)
     s_new = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s_new.connect((car_ip, 50012))
-    s_new.sendall(srv_msg_wrap(msg, car_ip))
+    my_send(s_new, srv_msg_wrap(msg, car_ip))
     # my_receive(s_new)
     print("receiving message from car")
     (decoded_data,
