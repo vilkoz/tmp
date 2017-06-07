@@ -12,6 +12,7 @@ from server import my_receive
 from server import my_send
 
 SERVER_IP = "192.168.0.2"
+CAR_ID = "192.168.0.247"
 MODE = 0
 
 HOST = ""
@@ -50,11 +51,11 @@ def msg_wrap_to_send(msg):
     encoded_bytes = base64.b64encode(my_rsa.pack(encoded_int))
     json_data_id = json.dumps({
         "data": encoded_bytes,
-        "id" : "192.168.0.247",
+        "id" : CAR_ID,
         "type" : "phone_number",
         "exp_time" : int(time.time()) + 10
         })
-    sign = my_sign.sign_data(json_data_id, "../keys/192.168.0.247.pem")
+    sign = my_sign.sign_data(json_data_id, "../keys/"+CAR_ID+".pem")
     json_send = json.dumps({
         "sign" : sign,
         "data_id" : json_data_id,
@@ -91,7 +92,7 @@ def decode_srv_message(data_id_json):
         raise DecodeError
     b64_data = bytes(base64.b64decode(data_id['data']))
     data = my_rsa.unpack(b64_data)
-    return my_rsa.decode(data, "../keys/192.168.0.247.pem")
+    return my_rsa.decode(data, "../keys/"+CAR_ID+".pem")
 
 def msg_unwrap_raw(received_data):
     try:
@@ -119,9 +120,14 @@ def proc_connection(con_socket, info_thread):
     if (data == "guard on"):
         info_thread = StoppableThread()
         info_thread.start()
+        my_send(con_socket, msg_wrap_to_send("guard started"))
+        con_socket.close()
         return info_thread
     elif (data == "guard off"):
         info_thread.stop()
+        del info_thread
+        my_send(con_socket, msg_wrap_to_send("guard stopped"))
+        con_socket.close()
         return 0
     else:
         print("[WARNING] Unrecognized command: " + data)
@@ -129,14 +135,14 @@ def proc_connection(con_socket, info_thread):
 
 
 if __name__ == "__main__":
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((HOST, PORT))
-    s.listen(1)
-    info_thread = 0
+    s_ = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s_.bind((HOST, PORT))
+    s_.listen(1)
+    info_thread_ = 0
     try:
         while 1:
-            (con_socket, addres) = s.accept()
+            (con_socket_, addres) = s_.accept()
             print("accepted connection from ", addres)
-            info_thread = proc_connection(con_socket, info_thread)
+            info_thread_ = proc_connection(con_socket_, info_thread_)
     except KeyboardInterrupt:
         sys.exit()

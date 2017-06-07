@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.7
 from __future__ import print_function
 
 import socket
@@ -10,21 +10,14 @@ import base64
 import time
 import database
 
+MSGLEN = 4096
+my_rsa.VERBOSE = False
+VERBOSE = False
+
 class DecodeError(Exception):
     pass
 class SignatureError(Exception):
     pass
-
-MSGLEN = 4096
-HOST = ""
-PORT = 50012
-
-my_rsa.VERBOSE = False
-VERBOSE = False
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST, PORT))
-s.listen(1)
 
 def my_send(server, msg):
     totalsend = 0
@@ -75,12 +68,11 @@ def verify_client_sign(received_data, client):
     if not database.get_match_key(client_id, client_type):
         print("[ERROR] invalid id from" + repr(client[1]))
         raise SignatureError
-    # TODO: get numbers_path by user id
     if not (my_sign.verify_sign(signature, data_id_json,
     "keys/" + client_id + ".pem")):
         print("[ERROR] wrong signature from" + repr(client[1]))
         raise SignatureError
-    return data_id_json
+    return (data_id_json, client_id, client_type)
 
 def decode_message(data_id_json, client):
     try:
@@ -97,23 +89,77 @@ def decode_message(data_id_json, client):
     data = my_rsa.unpack(b64_data)
     return my_rsa.decode(data, "../numbers.txt")
 
+def srv_msg_wrap(msg, client_id):
+    encoded_int = (my_rsa.encode(msg, "keys/" + client_id + ".pem"));
+    encoded_bytes = base64.b64encode(my_rsa.pack(encoded_int))
 
-def proc_client(client):
-    string = "processing: " + repr(client[0]) + " " + repr(client[1])
-    print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + string)
-    received_data = my_receive(client[0]).decode()
+    json_data_id = json.dumps({
+        "data": encoded_bytes,
+        "exp_time" : int(time.time()) + 10
+        })
+    sign = my_sign.sign_data(json_data_id, "../numbers.txt")
+    json_send = json.dumps({
+        "sign" : sign,
+        "data_id" : json_data_id,
+        })
+    send_data = json_send
+    send_data += (b'\x00')
+    return send_data
+
+def verify_decode_raw(client, received_data):
     try:
-        data_id_json = verify_client_sign(received_data, client)
+        (data_id_json,
+        client_id,
+        client_type) = verify_client_sign(received_data, client)
     except SignatureError:
-        return
+        raise SignatureError
     if (VERBOSE):
         print("received data: \n")
         my_rsa.print_hex(received_data)
     try:
         decoded_data = decode_message(data_id_json, client)
     except DecodeError:
-        return
+        raise DecodeError
+    return (decoded_data, client_id, client_type)
+
+def send_message_to_car(msg, client_id, client_type):
+    car_ip = database.get_match_key(client_id, client_type)
+    s_new = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s_new.connect((car_ip, 50012))
+    s_new.sendall(srv_msg_wrap(msg, car_ip))
+    # my_receive(s_new)
+    (decoded_data,
+    client_id,
+    client_type) = verify_decode_raw((s_new, 'tmp'), my_receive(s_new))
+    return decoded_data
+
+def proc_client(client):
+    string = "processing: " + repr(client[0]) + " " + repr(client[1])
+    print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + string)
+    received_data = my_receive(client[0]).decode()
+    try:
+        (decoded_data,
+        client_id,
+        client_type) = verify_decode_raw(client, received_data)
+    except (SignatureError, DecodeError):
+        return 0
     print("received and decoded data:", decoded_data)
+    if (decoded_data == "guard on"):
+        try:
+            response = send_message_to_car("guard on", client_id, client_type)
+        except (SignatureError, DecodeError):
+            return 0
+        if (response == "guard started"):
+            print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + 
+                    "STARTED GUARDD FOR CLIENT " + client_id)
+    if (decoded_data == "guard off"):
+        try:
+            response = send_message_to_car("guard off", client_id, client_type)
+        except (SignatureError, DecodeError):
+            return 0
+        if (response == "guard stopped"):
+            print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + 
+                    "STOPPED GUARDD FOR CLIENT " + client_id)
 
 def proc_sockets(socket_list):
     for client in socket_list:
@@ -135,10 +181,17 @@ class ProcThread(threading.Thread):
         print("Number of clients: ", len(self.clients_list))
         self.clients_list.append(client)
 
+if __name__ == "__main__":
+    HOST = ""
+    PORT = 50012
 
-pc = ProcThread()
-pc.start()
-while 1:
-    (client_socket, addres) = s.accept()
-    print("accepted connection from ", addres)
-    pc.add_client((client_socket, addres))
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST, PORT))
+    s.listen(1)
+
+    pc = ProcThread()
+    pc.start()
+    while 1:
+        (client_socket, addres) = s.accept()
+        print("accepted connection from ", addres)
+        pc.add_client((client_socket, addres))

@@ -72,7 +72,7 @@ def verify_client_sign(received_data, client):
     "keys/" + client_id + ".pem")):
         print("[ERROR] wrong signature from" + repr(client[1]))
         raise SignatureError
-    return data_id_json
+    return (data_id_json, client_id, client_type)
 
 def decode_message(data_id_json, client):
     try:
@@ -108,7 +108,9 @@ def srv_msg_wrap(msg, client_id):
 
 def verify_decode_raw(client, received_data):
     try:
-        data_id_json = verify_client_sign(received_data, client)
+        (data_id_json,
+        client_id,
+        client_type) = verify_client_sign(received_data, client)
     except SignatureError:
         raise SignatureError
     if (VERBOSE):
@@ -118,6 +120,17 @@ def verify_decode_raw(client, received_data):
         decoded_data = decode_message(data_id_json, client)
     except DecodeError:
         raise DecodeError
+    return (decoded_data, client_id, client_type)
+
+def send_message_to_car(msg, client_id, client_type):
+    car_ip = database.get_match_key(client_id, client_type)
+    s_new = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s_new.connect((car_ip, 50012))
+    s_new.sendall(srv_msg_wrap(msg, car_ip))
+    # my_receive(s_new)
+    (decoded_data,
+    client_id,
+    client_type) = verify_decode_raw((s_new, 'tmp'), my_receive(s_new))
     return decoded_data
 
 def proc_client(client):
@@ -125,10 +138,28 @@ def proc_client(client):
     print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + string)
     received_data = my_receive(client[0]).decode()
     try:
-        decoded_data = verify_decode_raw(client, received_data)
+        (decoded_data,
+        client_id,
+        client_type) = verify_decode_raw(client, received_data)
     except (SignatureError, DecodeError):
-        return
+        return 0
     print("received and decoded data:", decoded_data)
+    if (decoded_data == "guard on"):
+        try:
+            response = send_message_to_car("guard on", client_id, client_type)
+        except (SignatureError, DecodeError):
+            return 0
+        if (response == "guard started"):
+            print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + 
+                    "STARTED GUARDD FOR CLIENT " + client_id)
+    if (decoded_data == "guard off"):
+        try:
+            response = send_message_to_car("guard off", client_id, client_type)
+        except (SignatureError, DecodeError):
+            return 0
+        if (response == "guard stopped"):
+            print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + 
+                    "STOPPED GUARDD FOR CLIENT " + client_id)
 
 def proc_sockets(socket_list):
     for client in socket_list:
