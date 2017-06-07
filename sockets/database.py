@@ -36,11 +36,11 @@ def get_match_key(value, field):
         return False
 
 if __name__ == "__main__":
-    # if len(sys.argv) != 3:
-    #     print("script for inserting values in database")
-    #     print("usage: ./databse.py phone_number car_serial")
-    #     sys.exit(0)
-    # insert(sys.argv[1], sys.argv[2])
-    print("find by phone 1234: " + get_match_key("1234", 'phone_number'))
-    print("find by car_serial: " + get_match_key("192.168.0.247", 'car_serial'))
+    if len(sys.argv) != 3:
+        print("script for inserting values in database")
+        print("usage: ./databse.py phone_number car_serial")
+        sys.exit(0)
+    insert(sys.argv[1], sys.argv[2])
+    # print("find by phone 1234: " + get_match_key("1234", 'phone_number'))
+    # print("find by car_serial: " + get_match_key("192.168.0.247", 'car_serial'))
 

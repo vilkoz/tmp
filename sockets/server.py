@@ -9,6 +9,11 @@ import json
 import base64
 import time
 
+class DecodeError(Exception):
+    pass
+class SignatureError(Exception):
+    pass
+
 MSGLEN = 4096
 HOST = ""
 PORT = 50012
@@ -54,50 +59,58 @@ def my_receive(server):
         ret += chunk
     return ret[:-1]
 
+def verify_client_sign(received_data, client):
+    try:
+        json_msg = json.loads(received_data)
+        signature = json_msg['sign'].encode()
+        data_id_json = json_msg['data_id'].encode()
+        client_id = json.loads(data_id_json)['id']
+    except Exception as e:
+        print("exception: ", (e.message))
+        print("[ERROR] wrong message format! from" + repr(client[1]))
+        raise SignatureError
+    # TODO: get numbers_path by user id
+    if not (my_sign.verify_sign(signature, data_id_json, "../numbers.txt")):
+        print("[ERROR] wrong signature from" + repr(client[1]))
+        raise SignatureError
+    return data_id_json
+
+def decode_message(data_id_json, client):
+    try:
+        data_id = json.loads(data_id_json)
+        exp_time = int(data_id['exp_time'])
+    except Exception as e:
+        print("[ERROR] exception: ", (e.message))
+        print("[ERROR] wrong data_id format from" + repr(client[1]))
+        raise DecodeError
+    if (int(time.time()) > exp_time):
+        print("[ERROR] expired message from" + repr(client[1]))
+        raise DecodeError
+    b64_data = bytes(base64.b64decode(data_id['data']))
+    data = my_rsa.unpack(b64_data)
+    return my_rsa.decode(data, "../numbers.txt")
+
+
+def proc_client(client):
+    string = "processing: " + repr(client[0]) + " " + repr(client[1])
+    print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + string)
+    received_data = my_receive(client[0]).decode()
+    try:
+        data_id_json = verify_client_sign(received_data, client)
+    except SignatureError:
+        return
+    if (VERBOSE):
+        print("received data: \n")
+        my_rsa.print_hex(received_data)
+    try:
+        decoded_data = decode_message(data_id_json, client)
+    except DecodeError:
+        return
+    print("received and decoded data:", decoded_data)
+
 def proc_sockets(socket_list):
     for client in socket_list:
-        string = "processing: \n" + repr(client[0]) + " \n" + repr(client[1])
-        print (string)
-        # received_data = my_rsa.unpack(my_receive(client[0]))
-        received_data = my_receive(client[0]).decode()
-        try:
-            json_msg = json.loads(received_data)
-            signature = json_msg['sign'].encode()
-            data_id_json = json_msg['data_id'].encode()
-        except Exception as e:
-            print("exception: ", (e.message))
-            print("wrong message format! from" + repr(client[1]))
-            client[0].close()
-            socket_list.remove(client)
-            return
-        if not (my_sign.verify_sign(signature, data_id_json, "../numbers.txt")):
-            print("wrong signature from" + repr(client[1]))
-            client[0].close()
-            socket_list.remove(client)
-            return
-        if (VERBOSE):
-            print("received data: \n")
-            my_rsa.print_hex(received_data)
-        try:
-            data_id = json.loads(data_id_json)
-            exp_time = int(data_id['exp_time'])
-            if (int(time.time()) > exp_time):
-                print("expired message from" + repr(client[1]))
-                client[0].close()
-                socket_list.remove(client)
-                return
-            b64_data = bytes(base64.b64decode(data_id['data']))
-            data = my_rsa.unpack(b64_data)
-        except Exception as e:
-            print("exception: ", (e.message))
-            print("wrong data_id format from" + repr(client[1]))
-            client[0].close()
-            socket_list.remove(client)
-            return
-        # TODO: get numbers_path by user id
-        decoded_data = my_rsa.decode(data, "../numbers.txt")
-        print("received and decoded data:", decoded_data)
-        # my_send(client[0], string + "received: " + received_data)
+        proc_client(client)
         client[0].close()
         socket_list.remove(client)
         print("Number of clients: ", len(socket_list))
