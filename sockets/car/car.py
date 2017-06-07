@@ -34,7 +34,7 @@ class StoppableThread(threading.Thread):
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((SERVER_IP, 50012))
             data = "STATUS: OK, GPS: Latitude: 41.7696 Longitude: -88.4588"
-            s.sendall(msg_wrap_to_send(data))
+            my_send(s, msg_wrap_to_send(data))
             s.close()
             time.sleep(10)
         print("Stopped InfoThread")
@@ -52,7 +52,7 @@ def msg_wrap_to_send(msg):
     json_data_id = json.dumps({
         "data": encoded_bytes,
         "id" : CAR_ID,
-        "type" : "phone_number",
+        "type" : "car_serial",
         "exp_time" : int(time.time()) + 10
         })
     sign = my_sign.sign_data(json_data_id, "../keys/"+CAR_ID+".pem")
@@ -106,6 +106,7 @@ def msg_unwrap_raw(received_data):
     return decoded_data
 
 def proc_connection(con_socket, info_thread):
+    print("receivng....")
     rec_data = my_receive(con_socket).decode()
     print("received data: ", rec_data)
     try:
