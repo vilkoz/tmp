@@ -10,6 +10,8 @@ import base64
 import time
 import database
 
+KEY_PATH = "../numbers.txt"
+
 MSGLEN = 4096
 my_rsa.VERBOSE = False
 VERBOSE = False
@@ -88,7 +90,7 @@ def decode_message(data_id_json, client):
         raise DecodeError
     b64_data = bytes(base64.b64decode(data_id['data']))
     data = my_rsa.unpack(b64_data)
-    return my_rsa.decode(data, "../numbers.txt")
+    return my_rsa.decode(data, KEY_PATH)
 
 def srv_msg_wrap(msg, client_id):
     encoded_int = (my_rsa.encode(msg, "keys/" + client_id + ".pem"));
@@ -98,7 +100,7 @@ def srv_msg_wrap(msg, client_id):
         "data": encoded_bytes,
         "exp_time" : int(time.time()) + 10
         })
-    sign = my_sign.sign_data(json_data_id, "../numbers.txt")
+    sign = my_sign.sign_data(json_data_id, KEY_PATH)
     json_send = json.dumps({
         "sign" : sign,
         "data_id" : json_data_id,
