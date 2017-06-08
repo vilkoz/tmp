@@ -48,7 +48,8 @@ class LoginScreen(GridLayout):
         super(LoginScreen, self).__init__(**kwargs)
         self.cols = 2
         self.add_widget(Label(text="Output"))
-        self.output = Label(text="")
+        self.output = TextInput(readonly=True, background_color=[0, 0, 0, 0],
+                foreground_color=[1, 1, 1, 1])
         self.add_widget(self.output)
         self.add_widget(Label(text='message'))
         self.message = TextInput(multiline=False)
@@ -203,12 +204,14 @@ class SettingsLayout(GridLayout):
         self.phone_number = TextInput()
         self.add_widget(self.phone_number)
         self.add_widget(Label(text="keys file"))
-        self.keys_path = Button(text="../../numbers.txt",
-                on_press=self.show_load)
+        self.keys_path = TextInput(text="../../numbers.txt", readonly=True)
+        # self.keys_path.bind(on_press=self.show_load)
+        self.keys_path.bind(focus=self.input_focus)
         self.add_widget(self.keys_path)
         self.add_widget(Label(text="own keys file"))
-        self.own_keys_path = Button(text="../../numbers.txt",
-                on_press=self.show_load)
+        self.own_keys_path = TextInput(text="../../numbers.txt", readonly=True)
+        # self.own_keys_path.bind(on_press=self.show_load)
+        self.own_keys_path.bind(focus=self.input_focus)
         self.add_widget(self.own_keys_path)
         self.load_strings()
 
@@ -247,6 +250,16 @@ class SettingsLayout(GridLayout):
             self.keys_path.text = contents['keys_path'].encode()
             self.own_keys_path.text = contents['own_keys_path'].encode()
             self.phone_number.text = contents['phone_number'].encode()
+
+    def input_focus(self, instance, value):
+        if value:
+            print "focused"
+            print instance
+            self.show_load(instance)
+        else:
+            print "unfocused"
+            print instance
+
 
     def show_load(self, obj):
         if obj == self.keys_path:
