@@ -124,22 +124,28 @@ def proc_connection(con_socket, info_thread):
     print("unwrapped data: ", data)
     if (data == "guard on"):
         if (info_thread != 0):
-            my_send(con_socket, msg_wrap_to_send("guard already runnnig"))
+            print("sending response: " + "guard already running")
+            my_send(con_socket, msg_wrap_to_send("guard already running"))
+            print("sended response")
             return info_thread
         info_thread = StoppableThread()
         info_thread.start()
-        print("sending response")
+        print("sending response" + "guard started")
         my_send(con_socket, msg_wrap_to_send("guard started"))
         print("sended response")
         con_socket.close()
         return info_thread
     elif (data == "guard off"):
         if (info_thread == 0):
-            my_send(con_socket, msg_wrap_to_send("guard not runnnig"))
+            print("sending response" + "guard not running")
+            my_send(con_socket, msg_wrap_to_send("guard not running"))
+            print("sended response")
             return info_thread
         info_thread.stop()
         del info_thread
+        print("sending response" + "guard stopped")
         my_send(con_socket, msg_wrap_to_send("guard stopped"))
+        print("sended response")
         con_socket.close()
         return 0
     else:
