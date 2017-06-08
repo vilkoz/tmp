@@ -12,7 +12,9 @@ from server import my_receive
 from server import my_send
 
 SERVER_IP = "192.168.0.2"
+SRV_KEY_PATH = "../../numbers.txt"
 CAR_ID = "192.168.0.247"
+PRIVATE_KEY_PATH = "../keys/" + CAR_ID + ".pem"
 MODE = 0
 
 HOST = ""
@@ -35,6 +37,8 @@ class StoppableThread(threading.Thread):
             s.connect((SERVER_IP, 50012))
             data = "STATUS: OK, GPS: Latitude: 41.7696 Longitude: -88.4588"
             my_send(s, msg_wrap_to_send(data))
+            print(time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) +
+                    "Sending status to server")
             s.close()
             time.sleep(10)
         print("Stopped InfoThread")
@@ -47,7 +51,7 @@ class StoppableThread(threading.Thread):
 
 
 def msg_wrap_to_send(msg):
-    encoded_int = (my_rsa.encode(msg, "../../numbers.txt"));
+    encoded_int = (my_rsa.encode(msg, SRV_KEY_PATH));
     encoded_bytes = base64.b64encode(my_rsa.pack(encoded_int))
     json_data_id = json.dumps({
         "data": encoded_bytes,
@@ -55,7 +59,7 @@ def msg_wrap_to_send(msg):
         "type" : "car_serial",
         "exp_time" : int(time.time()) + 10
         })
-    sign = my_sign.sign_data(json_data_id, "../keys/"+CAR_ID+".pem")
+    sign = my_sign.sign_data(json_data_id, PRIVATE_KEY_PATH)
     json_send = json.dumps({
         "sign" : sign,
         "data_id" : json_data_id,
@@ -74,7 +78,7 @@ def verify_srv_sign(received_data):
         print("exception: ", (e.message))
         print("[ERROR] wrong message format! from srv")
         raise SignatureError
-    if not (my_sign.verify_sign(signature, data_id_json, "../../numbers.txt")):
+    if not (my_sign.verify_sign(signature, data_id_json, SRV_KEY_PATH)):
         print("[ERROR] wrong signature from")
         raise SignatureError
     return data_id_json
@@ -92,7 +96,7 @@ def decode_srv_message(data_id_json):
         raise DecodeError
     b64_data = bytes(base64.b64decode(data_id['data']))
     data = my_rsa.unpack(b64_data)
-    return my_rsa.decode(data, "../keys/"+CAR_ID+".pem")
+    return my_rsa.decode(data, PRIVATE_KEY_PATH)
 
 def msg_unwrap_raw(received_data):
     try:
