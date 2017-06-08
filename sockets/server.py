@@ -124,18 +124,37 @@ def verify_decode_raw(client, received_data):
         raise DecodeError
     return (decoded_data, client_id, client_type)
 
+def save_connect(con_socket, car_ip):
+    try:
+        con_socket.connect((car_ip, 50012))
+    except socket.error as s_err:
+        if s_err.errno != 111:
+            raise s_err
+        tryes = 5
+        print ("Connection refused, retrying..")
+        for i in range(0, tryes + 1):
+            print ("Try number ", str(i))
+            try:
+                con_socket.connect((car_ip, 50012))
+            except socket.error as try_err:
+                if try_err.errno != 111:
+                    raise try_err
+            time.sleep(1)
+        print ("Connection error")
+        raise DecodeError
+
 def send_message_to_car(msg, client_id, client_type):
     print("sending message to car")
     car_ip = database.get_match_key(client_id, client_type)
     s_new = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s_new.connect((car_ip, 50012))
+    save_connect(s_new, car_ip)
     my_send(s_new, srv_msg_wrap(msg, car_ip))
     # my_receive(s_new)
     print("receiving message from car")
     (decoded_data,
     client_id,
     client_type) = verify_decode_raw((s_new, 'tmp'), my_receive(s_new))
-    print("received message from car")
+    print("received message from car: " + decoded_data)
     return decoded_data
 
 def proc_client(client):
@@ -154,6 +173,7 @@ def proc_client(client):
             response = send_message_to_car("guard on", client_id, client_type)
         except (SignatureError, DecodeError):
             print("[ERROR] send message fail")
+            my_send(client[0], srv_msg_wrap("Car is unreacheble", client_id))
             return 0
         if (response == "guard started"):
             info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STARTED GUARDD FOR CLIENT " + client_id
@@ -168,13 +188,14 @@ def proc_client(client):
             response = send_message_to_car("guard off", client_id, client_type)
         except (SignatureError, DecodeError):
             print("[ERROR] send message fail")
+            my_send(client[0], srv_msg_wrap("Car is unreacheble", client_id))
             return 0
         if (response == "guard stopped"):
             info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STOPPED GUARDD FOR CLIENT " + client_id
             print (info_str)
             my_send(client[0], srv_msg_wrap(info_str, client_id))
         elif (response == "guard not running"):
-            info_str = time.strftime("[%d/%m/%y %H:%M:%S][ERROR] ",time.gmtime()) + "GUARD ALREADY NOT for" + client_id
+            info_str = time.strftime("[%d/%m/%y %H:%M:%S][ERROR] ",time.gmtime()) + "GUARD NOT RUNNING for" + client_id
             print (info_str)
             my_send(client[0], srv_msg_wrap(info_str, client_id))
     elif (decoded_data == "SOS"):

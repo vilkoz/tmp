@@ -152,7 +152,24 @@ class LoginScreen(GridLayout):
         print(obj)
         (ipaddr, keys_path, own_keys_path, phone_number) = self.load_strings()
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((ipaddr, 50012))
+        try:
+            s.connect((ipaddr, 50012))
+        except socket.error as s_err:
+            if s_err.errno != 111:
+                raise s_err
+            tryes = 5
+            print "Connection refused, retrying.."
+            for i in range(0, tryes + 1):
+                print "Try number ", str(i)
+                try:
+                    s.connect((ipaddr, 50012))
+                except socket.error as try_err:
+                    if try_err.errno != 111:
+                        raise try_err
+                time.sleep(1)
+            print "Connection error"
+            self.output.text = "Connection error"
+            return
         encoded_int = (my_rsa.encode(self.message.text, keys_path));
         encoded_bytes = base64.b64encode(my_rsa.pack(encoded_int))
         json_data_id = json.dumps({
