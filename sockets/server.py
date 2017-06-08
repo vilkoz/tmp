@@ -159,6 +159,10 @@ def proc_client(client):
             info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STARTED GUARDD FOR CLIENT " + client_id
             print (info_str)
             my_send(client[0], srv_msg_wrap(info_str, client_id))
+        elif (response == "guard already running"):
+            info_str = time.strftime("[%d/%m/%y %H:%M:%S][ERROR] ",time.gmtime()) + "GUARD ALREADY RUNNING for" + client_id
+            print (info_str)
+            my_send(client[0], srv_msg_wrap(info_str, client_id))
     elif (decoded_data == "guard off"):
         try:
             response = send_message_to_car("guard off", client_id, client_type)
@@ -167,6 +171,10 @@ def proc_client(client):
             return 0
         if (response == "guard stopped"):
             info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STOPPED GUARDD FOR CLIENT " + client_id
+            print (info_str)
+            my_send(client[0], srv_msg_wrap(info_str, client_id))
+        elif (response == "guard not running"):
+            info_str = time.strftime("[%d/%m/%y %H:%M:%S][ERROR] ",time.gmtime()) + "GUARD ALREADY NOT for" + client_id
             print (info_str)
             my_send(client[0], srv_msg_wrap(info_str, client_id))
     elif (decoded_data == "SOS"):
