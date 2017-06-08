@@ -123,6 +123,9 @@ def proc_connection(con_socket, info_thread):
                 "[SECURITY WARNING] Decription error for: " + repr(con_socket))
     print("unwrapped data: ", data)
     if (data == "guard on"):
+        if (info_thread != 0):
+            my_send(con_socket, msg_wrap_to_send("guard already runnnig"))
+            return info_thread
         info_thread = StoppableThread()
         info_thread.start()
         print("sending response")
@@ -131,6 +134,9 @@ def proc_connection(con_socket, info_thread):
         con_socket.close()
         return info_thread
     elif (data == "guard off"):
+        if (info_thread == 0):
+            my_send(con_socket, msg_wrap_to_send("guard not runnnig"))
+            return info_thread
         info_thread.stop()
         del info_thread
         my_send(con_socket, msg_wrap_to_send("guard stopped"))
