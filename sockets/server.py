@@ -156,17 +156,27 @@ def proc_client(client):
             print("[ERROR] send message fail")
             return 0
         if (response == "guard started"):
-            print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + 
-                    "STARTED GUARDD FOR CLIENT " + client_id)
-    if (decoded_data == "guard off"):
+            info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STARTED GUARDD FOR CLIENT " + client_id
+            print (info_str)
+            my_send(client[0], srv_msg_wrap(info_str, client_id))
+    elif (decoded_data == "guard off"):
         try:
             response = send_message_to_car("guard off", client_id, client_type)
         except (SignatureError, DecodeError):
             print("[ERROR] send message fail")
             return 0
         if (response == "guard stopped"):
-            print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + 
-                    "STOPPED GUARDD FOR CLIENT " + client_id)
+            info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STOPPED GUARDD FOR CLIENT " + client_id
+            print (info_str)
+            my_send(client[0], srv_msg_wrap(info_str, client_id))
+    elif (decoded_data == "SOS"):
+        info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "SOS SIGNAL from: " + client_id
+        print (info_str)
+        my_send(client[0], srv_msg_wrap("OPERATIONAL TEAM IS ON THE WAY", client_id))
+    else:
+        info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "unrecognized command" + decoded_data + " from: " + client_id
+        print (info_str)
+        my_send(client[0], srv_msg_wrap(info_str, client_id))
 
 def proc_sockets(socket_list):
     for client in socket_list:

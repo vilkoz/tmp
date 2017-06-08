@@ -19,6 +19,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 
 import os
 
+class DecodeError(Exception):
+    pass
+class SignatureError(Exception):
+    pass
+
 class MyFileChooser(FileChooserListView):
     load = ObjectProperty(None)
 
@@ -48,6 +53,13 @@ class LoginScreen(GridLayout):
         self.add_widget(Label(text='message'))
         self.message = TextInput(multiline=False)
         self.add_widget(self.message)
+        self.add_widget(Button(text="guard on",
+            on_press = self.send_button_test))
+        self.add_widget(Button(text="guard off",
+            on_press = self.send_button_test))
+        self.add_widget(Label(text='call help'))
+        self.add_widget(Button(text="SOS",
+            on_press = self.send_button_test))
         self.send = Button(text="send")
         self.send.bind(on_press=self.send_data)
         self.add_widget(self.send)
@@ -72,7 +84,72 @@ class LoginScreen(GridLayout):
                     contents['own_keys_path'].encode(),
                     contents['phone_number'].encode())
 
+    def receive(self, server):
+        chunks = []
+        bytes_recv = 0
+        while bytes_recv < 4096:
+            chunk = server.recv(2048)
+            if (chunk == 0):
+                # raise RuntimeError("socket connection broken")
+                print("socket connection broken")
+            chunks.append(chunk)
+            bytes_recv += len(chunk)
+            if (len(chunk) == 0 or chunk[-1] == '\x00'):
+                break
+        ret = b""
+        for chunk in chunks:
+            ret += chunk
+        return ret[:-1]
+
+    def decode_message(self, data_id_json, own_keys_path):
+        try:
+            data_id = json.loads(data_id_json)
+            exp_time = int(data_id['exp_time'])
+        except Exception as e:
+            print("[ERROR] exception: ", (e.message))
+            print("[ERROR] wrong data_id format from")
+            raise DecodeError
+        if (int(time.time()) > exp_time):
+            print("[ERROR] expired message from")
+            raise DecodeError
+        b64_data = bytes(base64.b64decode(data_id['data']))
+        data = my_rsa.unpack(b64_data)
+        return my_rsa.decode(data, own_keys_path)
+
+    def verify_sign(self, received_data, keys_path):
+        try:
+            json_msg = json.loads(received_data)
+            signature = json_msg['sign'].encode()
+            data_id_json = json_msg['data_id'].encode()
+        except Exception as e:
+            print("received_data: ", received_data)
+            print("exception: ", (e.message))
+            print("[ERROR] wrong message format! from")
+            raise SignatureError
+        if not (my_sign.verify_sign(signature, data_id_json,
+        keys_path)):
+            print("[ERROR] wrong signature from")
+            raise SignatureError
+        return data_id_json
+
+    def get_response(self, s, keys_path, own_keys_path):
+        resp = self.receive(s)
+        try:
+            data_id_json = self.verify_sign(resp, keys_path)
+        except SignatureError:
+            return "INTERNAL SIGNATURE ERROR"
+        try:
+            decoded_data = self.decode_message(data_id_json, own_keys_path)
+        except DecodeError:
+            return "INTERNAL DECODE ERROR"
+        return decoded_data
+    
+    def send_button_test(self, obj):
+        self.message.text = obj.text
+        self.send_data(obj)
+
     def send_data(self, obj):
+        print(obj)
         (ipaddr, keys_path, own_keys_path, phone_number) = self.load_strings()
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((ipaddr, 50012))
@@ -92,6 +169,7 @@ class LoginScreen(GridLayout):
         send_data1 = json_send 
         send_data1 += (b'\x00')
         s.sendall(send_data1)
+        self.output.text = self.get_response(s, keys_path, own_keys_path)
         s.close()
 
 class SettingsLayout(GridLayout):
