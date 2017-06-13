@@ -24,7 +24,6 @@ def unpack(__bytes):
         res += (ord(byte))
     return (res)
 
-
 def num_to_char(__r):
     __c = []
     while __r > 0:
@@ -153,8 +152,8 @@ def check_len(pub_key, msg):
     return (rlen)
 
 def encode_sign(msg_text, numbers_path):
-    fo = open(numbers_path, "r")
-    (n, e, d) = parse_nums(fo)
+    with open(numbers_path, "r") as fo:
+        (n, e, d) = parse_nums(fo)
     msg = char_to_num(msg_text)
     if VERBOSE:
         print("msg")
@@ -167,8 +166,8 @@ def encode_sign(msg_text, numbers_path):
     return (r)
 
 def decode_sign(chiper_text, numbers_path):
-    fo = open(numbers_path, "r")
-    (n, e, d) = parse_nums(fo)
+    with open(numbers_path, "r") as fo:
+        (n, e, d) = parse_nums(fo)
     r = pow(chiper_text, e, n)
     if VERBOSE:
         print("decoded")
@@ -177,8 +176,8 @@ def decode_sign(chiper_text, numbers_path):
     return (num_to_char(r))
 
 def encode(msg_text, numbers_path):
-    fo = open(numbers_path, "r")
-    (n, e, d) = parse_nums(fo)
+    with open(numbers_path, "r") as fo:
+        (n, e, d) = parse_nums(fo)
     msg = char_to_num(msg_text)
     rlen = check_len(n, msg)
     if VERBOSE:
@@ -195,8 +194,8 @@ def encode(msg_text, numbers_path):
     return (r)
 
 def decode(chiper_text, numbers_path):
-    fo = open(numbers_path, "r")
-    (n, e, d) = parse_nums(fo)
+    with open(numbers_path, "r") as fo:
+        (n, e, d) = parse_nums(fo)
     r = pow(chiper_text, d, n)
     if VERBOSE:
         print("decoded")
