@@ -157,6 +157,38 @@ def send_message_to_car(msg, client_id, client_type):
     print("received message from car: " + decoded_data)
     return decoded_data
 
+def car_guard_on(client, client_id, client_type):
+    try:
+        response = send_message_to_car("guard on", client_id, client_type)
+    except (SignatureError, DecodeError):
+        print("[ERROR] send message fail")
+        my_send(client[0], srv_msg_wrap("Car is unreacheble", client_id))
+        raise RantimeError("fail sending message")
+    if (response == "guard started"):
+        info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STARTED GUARDD FOR CLIENT " + client_id
+        print (info_str)
+        my_send(client[0], srv_msg_wrap(info_str, client_id))
+    elif (response == "guard already running"):
+        info_str = time.strftime("[%d/%m/%y %H:%M:%S][ERROR] ",time.gmtime()) + "GUARD ALREADY RUNNING for" + client_id
+        print (info_str)
+        my_send(client[0], srv_msg_wrap(info_str, client_id))
+
+def car_guard_off(client, client_id, client_type):
+    try:
+        response = send_message_to_car("guard off", client_id, client_type)
+    except (SignatureError, DecodeError):
+        print("[ERROR] send message fail")
+        my_send(client[0], srv_msg_wrap("Car is unreacheble", client_id))
+        raise RuntimeError("send message fail")
+    if (response == "guard stopped"):
+        info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STOPPED GUARDD FOR CLIENT " + client_id
+        print (info_str)
+        my_send(client[0], srv_msg_wrap(info_str, client_id))
+    elif (response == "guard not running"):
+        info_str = time.strftime("[%d/%m/%y %H:%M:%S][ERROR] ",time.gmtime()) + "GUARD NOT RUNNING for" + client_id
+        print (info_str)
+        my_send(client[0], srv_msg_wrap(info_str, client_id))
+
 def proc_client(client):
     string = "processing: " + repr(client[0]) + " " + repr(client[1])
     print (time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + string)
@@ -170,34 +202,14 @@ def proc_client(client):
     print("received and decoded data:", decoded_data)
     if (decoded_data == "guard on"):
         try:
-            response = send_message_to_car("guard on", client_id, client_type)
-        except (SignatureError, DecodeError):
-            print("[ERROR] send message fail")
-            my_send(client[0], srv_msg_wrap("Car is unreacheble", client_id))
+            car_guard_on(client, client_id, client_type)
+        except RuntimeError:
             return 0
-        if (response == "guard started"):
-            info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STARTED GUARDD FOR CLIENT " + client_id
-            print (info_str)
-            my_send(client[0], srv_msg_wrap(info_str, client_id))
-        elif (response == "guard already running"):
-            info_str = time.strftime("[%d/%m/%y %H:%M:%S][ERROR] ",time.gmtime()) + "GUARD ALREADY RUNNING for" + client_id
-            print (info_str)
-            my_send(client[0], srv_msg_wrap(info_str, client_id))
     elif (decoded_data == "guard off"):
         try:
-            response = send_message_to_car("guard off", client_id, client_type)
-        except (SignatureError, DecodeError):
-            print("[ERROR] send message fail")
-            my_send(client[0], srv_msg_wrap("Car is unreacheble", client_id))
+            car_guard_off(client, client_id, client_type)
+        except RuntimeError:
             return 0
-        if (response == "guard stopped"):
-            info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STOPPED GUARDD FOR CLIENT " + client_id
-            print (info_str)
-            my_send(client[0], srv_msg_wrap(info_str, client_id))
-        elif (response == "guard not running"):
-            info_str = time.strftime("[%d/%m/%y %H:%M:%S][ERROR] ",time.gmtime()) + "GUARD NOT RUNNING for" + client_id
-            print (info_str)
-            my_send(client[0], srv_msg_wrap(info_str, client_id))
     elif (decoded_data == "SOS"):
         info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "SOS SIGNAL from: " + client_id
         print (info_str)
