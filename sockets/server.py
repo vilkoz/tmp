@@ -126,7 +126,7 @@ def verify_decode_raw(client, received_data):
 
 def save_connect(con_socket, car_ip):
     try:
-        con_socket.connect((car_ip, 50012))
+        con_socket.connect((car_ip, 50013))
     except socket.error as s_err:
         if s_err.errno != 111:
             raise s_err
@@ -135,7 +135,7 @@ def save_connect(con_socket, car_ip):
         for i in range(0, tryes + 1):
             print ("Try number ", str(i))
             try:
-                con_socket.connect((car_ip, 50012))
+                con_socket.connect((car_ip, 50013))
             except socket.error as try_err:
                 if try_err.errno != 111:
                     raise try_err
@@ -163,7 +163,7 @@ def car_guard_on(client, client_id, client_type):
     except (SignatureError, DecodeError):
         print("[ERROR] send message fail")
         my_send(client[0], srv_msg_wrap("Car is unreacheble", client_id))
-        raise RantimeError("fail sending message")
+        raise RuntimeError("fail sending message")
     if (response == "guard started"):
         info_str = time.strftime("[%d/%m/%y %H:%M:%S] ",time.gmtime()) + "STARTED GUARDD FOR CLIENT " + client_id
         print (info_str)
